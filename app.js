@@ -58,8 +58,9 @@ app.use('/api', appointmentRoute)
 app.use('/api', patientRoute)
 app.use('/api', categoryRoute)
 app.use('/api', chatRoute)
-
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+});
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
