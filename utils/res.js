@@ -4,14 +4,12 @@ async function response(req, res, next) {
     try {
 
         const { res_object, model_name } = req;
-        console.log(model_name)
-        const { message, notify, result, results } = res_object;
-        if (notify)
+        if (res_object.notify)
             await notification.create({
-                data: message,
+                data: res_object.message,
                 type: model_name
             })
-        return res.status(200).json({ message: message, success: true, result: result, results: results });
+        return res.status(200).json({ ...res_object });
     }
     catch (err) {
         next(err)

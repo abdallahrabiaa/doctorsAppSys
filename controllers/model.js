@@ -1,13 +1,18 @@
 async function get(req, res, next) {
     try {
         const { Model, query } = req;
-        const { q, page, populate } = query;
+        const { q, page, populate, field, value } = query;
         const limit = 10;
         const defaultPage = page || 1;
-        const filter_object = { q }
-        const results = await Model.find(filter_object).skip(limit * defaultPage - limit).limit(limit).populate(populate).exec();
-        console.log(results)
-        const res_object = { message: "successfuly retrive data", success: true, results: results, notify: false };
+        const filterObject = {
+
+            name: { $regex: q || "", $options: 'i' }
+        };
+        if (field)
+            filterObject[field] = value;
+        const results = await Model.find(filterObject).skip(limit * defaultPage - limit).limit(limit).populate(populate).exec();
+        const total = await Model.countDocuments(filterObject);
+        const res_object = { message: "successfuly retrive data", success: true, results: results, total, notify: false };
         req.res_object = res_object;
         next()
     }
@@ -34,11 +39,10 @@ async function getOne(req, res, next) {
 async function create(req, res, next) {
     try {
         const { Model, query, body } = req;
-        const { ID, populate } = query;
         if (!Object.values(body).length) throw new Error(`Invalid body: ${JSON.stringify(body)}`)
         const result = await Model.create(body)
 
-        req.res_object = { message: `successfuly create ${result.name} `, success: true, result: result, notify: true };
+        req.res_object = { message: `successfuly create ${result.name || result._id} `, success: true, result: result, notify: true };
         next()
 
     }
@@ -79,5 +83,7 @@ async function remove(req, res, next) {
 
     }
 }
+
+
 
 module.exports = { get, create, remove, getOne, edit }

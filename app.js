@@ -13,8 +13,33 @@ var doctorRoute = require('./routes/doctor')
 var patientRoute = require('./routes/patient')
 var appointmentRoute = require('./routes/appointment')
 var categoryRoute = require('./routes/category')
+var chatRoute = require('./routes/chat')
 
-var bodyParser = require('body-parser');
+var AuthRoute = require('./routes/auth')
+const AdminJS = require('adminjs')
+const AdminJSExpress = require('@adminjs/express')
+const AdminJSMongoose = require('@adminjs/mongoose')
+const PATIENT = require('./models/patient')
+const CATEGORY = require('./models/category')
+const DOCTOR = require('./models/doctor')
+const NOTIFICATION = require('./models/notification')
+const APPOINTMENT = require('./models/appointment')
+const CHAT = require('./models/chat')
+
+AdminJS.registerAdapter(AdminJSMongoose)
+
+const adminJs = new AdminJS({
+  databases: [],
+  resources: [PATIENT, CATEGORY, DOCTOR, NOTIFICATION, APPOINTMENT, CHAT],
+  rootPath: '/admin',
+  branding: {
+    companyName: 'A25 App',
+    logo: "",
+    softwareBrothers: false
+  },
+})
+
+const router = AdminJSExpress.buildRouter(adminJs)
 const { errorHandler } = require('./utils/error');
 // view engine setup
 var whitelist = [config.frontend_URL, "http://localhost:8000"]
@@ -26,14 +51,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //! start to add crud 
+app.use(adminJs.options.rootPath, router)
+app.use('/auth', AuthRoute)
 app.use('/api', doctorRoute)
 app.use('/api', appointmentRoute)
 app.use('/api', patientRoute)
 app.use('/api', categoryRoute)
+app.use('/api', chatRoute)
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

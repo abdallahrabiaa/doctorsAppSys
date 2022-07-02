@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const { Schema, Types, model } = mongoose;
 const bcrypt = require('bcrypt');
+const { nameRegex } = require('../utils/name')
+
 const DoctorSchema = new Schema({
     name: {
         type: String,
         required: true,
-
-
     },
     email: {
         type: String,
@@ -25,19 +25,37 @@ const DoctorSchema = new Schema({
         type: Number,
         default: 0,
     },
-    hourCost: {
+    AppointmentCost: {
         type: Number,
         default: 0,
     },
-    workHours: [{ type: Number }],
+    workHours: {
+        from: {
+
+            type: Number,
+            default: 12
+
+
+        },
+        to: {
+
+            type: Number,
+            default: 12
+
+        }
+    },
     adress: {
         type: String,
     },
     category: {
         type: Types.ObjectId,
         ref: "Category"
+    },
+    banned: { type: Boolean, default: false },
+    phone: {
+        type: Number,
+        length: 11
     }
-
 
 }, { timestamps: true });
 DoctorSchema.pre('save', function (next) {

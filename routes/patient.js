@@ -1,6 +1,7 @@
 var express = require('express');
 const PATIENT = require('../models/patient')
 const model = require('../controllers/model');
+const { stats } = require('../controllers/stats');
 const { response } = require('../utils/res');
 const { errorHandler } = require('../utils/error');
 const { Router } = express;
@@ -37,5 +38,9 @@ router.get(modelPath + '/:ID', (req, res, next) => {
         req.model_name = modalName
     next()
 }, getOne, response)
-
+router.get(modelPath + "-stats", (req, res, next) => {
+    req.Model = PATIENT,
+        req.model_name = "patient"
+    next()
+}, stats, response)
 module.exports = router;

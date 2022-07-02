@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { Schema, Types, model } = mongoose;
+const { nameRegex } = require('../utils/name')
 const PatientSchema = new Schema({
     name: {
         type: String,
         required: true,
 
 
+
     },
     email: {
         type: String,
-        match: /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/,
+        match: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
         unique: true,
         required: true
     },
@@ -30,7 +32,8 @@ const PatientSchema = new Schema({
     balance: {
         type: Number,
         default: 0,
-    }
+    },
+    banned: { type: Boolean, default: false }
 
 }, { timestamps: true });
 PatientSchema.pre('save', function (next) {
