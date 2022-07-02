@@ -18,4 +18,3 @@ async function response(req, res, next) {
 
 module.exports = { response }
 
-"https://github.com/abdallahrabiaa/doctorsAppSys.git"

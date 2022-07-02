@@ -1,2 +1,0 @@
-(this["webpackJsonpA25 project for practical Training "]=this["webpackJsonpA25 project for practical Training "]||[]).push([[18],{477:function(t,a,e){"use strict";e.r(a);var n=e(0),r=e.n(n),c=e(90);a.default=function(){return r.a.createElement(r.a.Fragment,null,r.a.createElement(c.a,null,"Blank"))}},90:function(t,a,e){"use strict";var n=e(0),r=e.n(n);a.a=function(t){var a=t.children;return r.a.createElement("h1",{className:"my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"},a)}}}]);
-//# sourceMappingURL=18.ebe8b51a.chunk.js.map
